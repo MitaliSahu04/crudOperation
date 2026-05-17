@@ -40,7 +40,7 @@ export default function HomePage() {
               Full Stack CRUD Application
             </p>
 
-            <h1 className="text-6xl font-bold leading-tight mb-8">
+            <h1 className="text-6xl font-bold leading-tight mb-8 text-color">
               Modern Product
               <span className="block text-gray-500">
                 Management Dashboard
@@ -65,7 +65,7 @@ export default function HomePage() {
               </Link>
 
               <Link href="/products">
-                <button className="bg-white px-8 py-4 rounded-2xl font-semibold shadow hover:shadow-lg transition">
+                <button className=" text-color bg-white px-8 py-4 rounded-2xl font-semibold shadow hover:shadow-lg transition">
                   View Products
                 </button>
               </Link>
@@ -78,7 +78,7 @@ export default function HomePage() {
                 <FaLock size={28} />
               </div>
 
-              <h2 className="text-2xl font-bold mb-4">
+              <h2 className="text-2xl font-bold mb-4 text-color">
                 JWT Authentication
               </h2>
 
@@ -94,7 +94,7 @@ export default function HomePage() {
                 <FaBoxOpen size={28} />
               </div>
 
-              <h2 className="text-2xl font-bold mb-4">
+              <h2 className="text-2xl font-bold mb-4 text-color">
                 CRUD Operations
               </h2>
 
@@ -110,7 +110,7 @@ export default function HomePage() {
                 <FaServer size={28} />
               </div>
 
-              <h2 className="text-2xl font-bold mb-4">
+              <h2 className="text-2xl font-bold mb-4 text-color">
                 Express Backend
               </h2>
 
@@ -126,7 +126,7 @@ export default function HomePage() {
                 <FaDatabase size={28} />
               </div>
 
-              <h2 className="text-2xl font-bold mb-4">
+              <h2 className="text-2xl font-bold mb-4 text-color">
                 MongoDB Database
               </h2>
 

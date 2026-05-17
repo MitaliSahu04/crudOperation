@@ -124,7 +124,7 @@ const onSubmit = async (data) => {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-4xl font-bold text-color">
               Edit Product
             </h1>
 
@@ -134,7 +134,7 @@ const onSubmit = async (data) => {
           </div>
 
           <Link href="/products">
-            <button className="flex items-center gap-2 bg-white px-5 py-3 rounded-xl shadow-sm hover:shadow-md">
+            <button className="text-color flex items-center gap-2 bg-white px-5 py-3 rounded-xl shadow-sm hover:shadow-md">
               <FaArrowLeft />
 
               Back
@@ -166,7 +166,7 @@ const onSubmit = async (data) => {
             className="p-8"
           >
             <div className="mb-6">
-              <label className="flex items-center gap-2 font-semibold mb-3">
+              <label className="flex items-center gap-2 font-semibold mb-3 text-color">
                 <FaBoxOpen />
 
                 Product Name
@@ -175,7 +175,7 @@ const onSubmit = async (data) => {
               <input
                 type="text"
                 placeholder="Enter product name"
-                className="w-full border border-gray-300 p-4 rounded-xl focus:ring-2 focus:ring-black"
+                className="w-full text-color border border-gray-300 p-4 rounded-xl focus:ring-2 focus:ring-black"
                 {...register("name", {
                   required: "Product name is required",
                 })}
@@ -189,8 +189,8 @@ const onSubmit = async (data) => {
             </div>
 
             <div className="mb-6">
-              <label className="flex items-center gap-2 font-semibold mb-3">
-                <FaDollarSign />
+              <label className="flex items-center gap-2 font-semibold mb-3 text-color">
+               
 
                 Product Price
               </label>
@@ -198,7 +198,7 @@ const onSubmit = async (data) => {
               <input
                 type="number"
                 placeholder="Enter product price"
-                className="w-full border border-gray-300 p-4 rounded-xl focus:ring-2 focus:ring-black"
+                className="w-full text-color border border-gray-300 p-4 rounded-xl focus:ring-2 focus:ring-black"
                 {...register("price", {
                   required: "Price is required",
                 })}
@@ -212,7 +212,7 @@ const onSubmit = async (data) => {
             </div>
 
             <div className="mb-8">
-              <label className="flex items-center gap-2 font-semibold mb-3">
+              <label className="flex items-center gap-2 font-semibold mb-3 text-color">
                 <FaFileAlt />
 
                 Description
@@ -221,11 +221,11 @@ const onSubmit = async (data) => {
               <textarea
                 rows="6"
                 placeholder="Enter product description"
-                className="w-full border border-gray-300 p-4 rounded-xl focus:ring-2 focus:ring-black"
+                className="w-full text-color border border-gray-300 p-4 rounded-xl focus:ring-2 focus:ring-black"
                 {...register("description")}
               />
             </div>
-                <div className="flex gap-4">
+                <div className="flex gap-4 text-color ">
                 <input
                   type="file"
                   accept="image/*"
@@ -247,7 +247,7 @@ const onSubmit = async (data) => {
               <button
                 type="button"
                 onClick={() => router.push("/products")}
-                className="bg-gray-200 px-8 py-4 rounded-xl font-semibold hover:bg-gray-300 transition"
+                className="bg-gray-200 px-8 text-color py-4 rounded-xl font-semibold hover:bg-gray-300 transition"
               >
                 Cancel
               </button>

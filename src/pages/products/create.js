@@ -90,7 +90,7 @@ export default function CreateProduct() {
   return (
     <Layout>
       <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-sm">
-        <h1 className="text-4xl font-bold mb-8">
+        <h1 className="text-4xl font-bold mb-8 text-color">
           Create Product
         </h1>
 
@@ -101,21 +101,21 @@ export default function CreateProduct() {
         >
           <input
             placeholder="Product Name"
-            className="w-full border p-4 rounded-xl mb-5"
+            className="w-full border p-4 rounded-xl mb-5 text-color"
             {...register("name")}
           />
 
           <input
             type="number"
             placeholder="Price"
-            className="w-full border p-4 rounded-xl mb-5"
+            className="w-full border p-4 rounded-xl mb-5 text-color"
             {...register("price")}
           />
 
           <textarea
             rows="5"
             placeholder="Description"
-            className="w-full border p-4 rounded-xl mb-5"
+            className="w-full border p-4 rounded-xl mb-5 text-color"
             {...register(
               "description"
             )}
@@ -125,7 +125,7 @@ export default function CreateProduct() {
             type="file"
             accept="image/*"
             onChange={handleImage}
-            className="mb-6"
+            className="mb-6 text-color"
           />
 
           {preview && (

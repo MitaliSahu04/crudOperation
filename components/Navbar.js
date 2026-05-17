@@ -14,13 +14,13 @@ export default function Navbar() {
 
   return (
     <div className="bg-white px-6 py-4 shadow-sm flex justify-between items-center">
-      <h1 className="text-2xl font-bold">
+      <h1 className="text-2xl font-bold text-color">
         Dashboard
       </h1>
 
       <div className="flex items-center gap-4">
         <div className="text-right">
-          <p className="font-bold capitalize">
+          <p className="font-bold capitalize text-color">
             {user?.role || "Guest"}
           </p>
 

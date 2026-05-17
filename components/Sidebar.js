@@ -33,7 +33,7 @@ useEffect(() => {
       <div className="space-y-3">
         <Link
           href="/"
-          className="flex items-center gap-3 p-3 rounded hover:bg-gray-800"
+          className="flex items-center gap-3 p-3 rounded hover:bg-gray-800 "
         >
           <FaHome />
           Dashboard

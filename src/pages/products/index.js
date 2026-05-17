@@ -72,7 +72,7 @@ export default function ProductsPage() {
       <div>
         <div className="flex flex-col md:flex-row justify-between md:items-center mb-8 gap-4">
           <div>
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-4xl font-bold text-color">
               Products
             </h1>
 
@@ -133,7 +133,7 @@ export default function ProductsPage() {
             </p>
 
             <Link href="/products/create">
-              <button className="bg-black text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-800 transition">
+              <button className="bg-black text-white text-color px-8 py-4 rounded-xl font-semibold hover:bg-gray-800 transition">
                 Create Product
               </button>
             </Link>
@@ -157,8 +157,8 @@ export default function ProductsPage() {
                       {product.name}
                     </h2>
 
-                    <p className="text-green-600 font-semibold text-lg mt-2">
-                      ${product.price}
+                    <p className="text-green-600 font-semibold text-lg mt-2 text-color">
+                      {product.price}
                     </p>
                   </div>
 

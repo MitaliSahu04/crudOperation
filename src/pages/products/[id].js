@@ -83,7 +83,7 @@ export default function ProductDetails() {
       <div className="max-w-5xl mx-auto">
         <div className="mb-6 flex justify-between items-center">
           <Link href="/products">
-            <button className="flex items-center gap-2 bg-white px-5 py-3 rounded-xl shadow-sm hover:shadow-md">
+            <button className="text-color flex items-center gap-2 bg-white px-5 py-3 rounded-xl shadow-sm hover:shadow-md">
               <FaArrowLeft />
 
               Back
@@ -92,7 +92,7 @@ export default function ProductDetails() {
           
           {user?.role === "admin" && (
           <Link href={`/products/edit/${product._id}`}>
-            <button className="flex items-center  gap-2 bg-black text-white px-5 py-3 rounded-xl hover:bg-gray-800">
+            <button className="text-color flex items-center  gap-2 bg-black text-white px-5 py-3 rounded-xl hover:bg-gray-800">
               <FaEdit />
 
               Edit Product
@@ -131,20 +131,20 @@ export default function ProductDetails() {
                   className="w-full max-w-md rounded-2xl mb-8"
                 />
                 <div className="flex items-center gap-3 mb-4">
-                  <FaDollarSign className="text-green-600" />
 
-                  <h2 className="text-xl font-semibold">
+
+                  <h2 className="text-xl font-semibold text-color">
                     Price
                   </h2>
                 </div>
 
-                <p className="text-4xl font-bold text-green-600">
-                  ${product.price}
+                <p className="text-4xl font-bold text-green-600 text-color">
+                  {product.price}
                 </p>
               </div>
 
               <div className="bg-gray-50 p-6 rounded-2xl">
-                <h2 className="text-xl font-semibold mb-4">
+                <h2 className="text-xl font-semibold mb-4 text-color">
                   Product ID
                 </h2>
 
@@ -155,7 +155,7 @@ export default function ProductDetails() {
             </div>
 
             <div className="bg-gray-50 p-6 rounded-2xl mt-8">
-              <h2 className="text-2xl font-bold mb-4">
+              <h2 className="text-2xl font-bold mb-4 text-color">
                 Description
               </h2>
 
@@ -167,7 +167,7 @@ export default function ProductDetails() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
               <div className="bg-gray-50 p-6 rounded-2xl">
-                <h3 className="font-semibold mb-2">
+                <h3 className="font-semibold mb-2 text-color">
                   Created At
                 </h3>
 
@@ -179,7 +179,7 @@ export default function ProductDetails() {
               </div>
 
               <div className="bg-gray-50 p-6 rounded-2xl">
-                <h3 className="font-semibold mb-2">
+                <h3 className="font-semibold mb-2 text-color">
                   Updated At
                 </h3>
 

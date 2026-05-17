@@ -91,7 +91,7 @@ export default function Register() {
               <FaUserPlus size={32} />
             </div>
 
-            <h2 className="text-4xl font-bold">
+            <h2 className="text-4xl font-bold text-color">
               Register
             </h2>
 
@@ -101,12 +101,12 @@ export default function Register() {
           </div>
 
            <div className="mb-5">
-            <label className="block font-semibold mb-3">
+            <label className="block font-semibold mb-3 text-color">
               Select Role
             </label>
 
             <select
-              className="w-full border border-gray-300 rounded-xl p-4"
+              className="w-full border border-gray-300 rounded-xl p-4 text-color focus:ring-2 focus:ring-black"
               {...register("role")}
             >
               <option value="user">
@@ -120,7 +120,7 @@ export default function Register() {
           </div>
 
           <div className="mb-5">
-            <label className="block font-semibold mb-3">
+            <label className="block font-semibold mb-3 text-color">
               Full Name
             </label>
 
@@ -130,7 +130,7 @@ export default function Register() {
               <input
                 type="text"
                 placeholder="Enter your full name"
-                className="w-full border border-gray-300 rounded-xl p-4 pl-12 focus:ring-2 focus:ring-black"
+                className="w-full border text-color border-gray-300 rounded-xl p-4 pl-12 focus:ring-2 focus:ring-black"
                 {...register("name", {
                   required: "Name is required",
                 })}
@@ -145,17 +145,17 @@ export default function Register() {
           </div>
 
           <div className="mb-5">
-            <label className="block font-semibold mb-3">
+            <label className="block font-semibold text-color mb-3">
               Email Address
             </label>
 
-            <div className="relative">
+            <div className="relative ">
               <FaEnvelope className="absolute left-4 top-5 text-gray-400" />
 
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="w-full border border-gray-300 rounded-xl p-4 pl-12 focus:ring-2 focus:ring-black"
+                className="w-full border text-color border-gray-300 rounded-xl p-4 pl-12 focus:ring-2 focus:ring-black"
                 {...register("email", {
                   required: "Email is required",
                 })}
@@ -170,7 +170,7 @@ export default function Register() {
           </div>
 
           <div className="mb-8">
-            <label className="block font-semibold mb-3">
+            <label className="block font-semibold mb-3 text-color">
               Password
             </label>
 

@@ -70,7 +70,7 @@ const onSubmit = async (data) => {
           <div className="flex items-center gap-4">
             <div className="w-4 h-4 rounded-full bg-white"></div>
 
-            <p>JWT Authentication</p>
+            <p className="text-color">JWT Authentication</p>
           </div>
 
           <div className="flex items-center gap-4">
@@ -97,7 +97,7 @@ const onSubmit = async (data) => {
               <FaSignInAlt size={32} />
             </div>
 
-            <h2 className="text-4xl font-bold">
+            <h2 className="text-4xl font-bold text-color">
               Login
             </h2>
 
@@ -107,7 +107,7 @@ const onSubmit = async (data) => {
           </div>
 
           <div className="mb-5">
-            <label className="block font-semibold mb-3">
+            <label className="block font-semibold mb-3 text-color">
               Email Address
             </label>
 
@@ -117,7 +117,7 @@ const onSubmit = async (data) => {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="w-full border border-gray-300 rounded-xl p-4 pl-12 focus:ring-2 focus:ring-black"
+                className="w-full border text-color border-gray-300 rounded-xl p-4 pl-12 focus:ring-2 focus:ring-black"
                 {...register("email", {
                   required: "Email is required",
                 })}
@@ -132,7 +132,7 @@ const onSubmit = async (data) => {
           </div>
 
           <div className="mb-8">
-            <label className="block font-semibold mb-3">
+            <label className="block font-semibold mb-3 text-color">
               Password
             </label>
 
