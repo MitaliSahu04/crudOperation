@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import Layout from "../../../components/Layout";
 import api from "../../../lib/axios";
+import { getUser } from "../../../lib/auth";
 
 import {
   FaArrowLeft,
@@ -20,8 +21,12 @@ export default function ProductDetails() {
   const [product, setProduct] = useState(null);
 
   const [loading, setLoading] = useState(true);
+  const [user, setUser] =
+  useState(null);
 
   useEffect(() => {
+    const currentUser = getUser();
+    setUser(currentUser);
     if (id) {
       fetchProduct();
     }
@@ -84,7 +89,8 @@ export default function ProductDetails() {
               Back
             </button>
           </Link>
-
+          
+          {user?.role === "admin" && (
           <Link href={`/products/edit/${product._id}`}>
             <button className="flex items-center  gap-2 bg-black text-white px-5 py-3 rounded-xl hover:bg-gray-800">
               <FaEdit />
@@ -92,6 +98,7 @@ export default function ProductDetails() {
               Edit Product
             </button>
           </Link>
+        )}
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -103,7 +110,9 @@ export default function ProductDetails() {
 
               <div>
                 <h1 className="text-4xl font-bold">
-                  {product.name}
+                  Added By:
+                  {" "}
+                  {product?.name}
                 </h1>
 
                 <p className="text-gray-300 mt-2">
@@ -116,6 +125,11 @@ export default function ProductDetails() {
           <div className="p-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-gray-50 p-6 rounded-2xl">
+                <img
+                  src={`http://backendforcrude.onrender.com/uploads/${product.image}`}
+                  alt={product.name}
+                  className="w-full max-w-md rounded-2xl mb-8"
+                />
                 <div className="flex items-center gap-3 mb-4">
                   <FaDollarSign className="text-green-600" />
 

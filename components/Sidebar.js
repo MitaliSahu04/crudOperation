@@ -6,9 +6,18 @@ import {
   FaPlus,
   FaSignOutAlt,
 } from "react-icons/fa";
+import { getUser } from "../lib/auth";
+import { useEffect, useState } from "react";
 
 export default function Sidebar() {
   const router = useRouter();
+
+  const [user, setUser] =
+  useState(null);
+
+useEffect(() => {
+  setUser(getUser());
+}, []);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -36,7 +45,7 @@ export default function Sidebar() {
           <FaBox />
           Products
         </Link>
-
+      {user?.role === "admin" && (
         <Link
           href="/products/create"
           className="flex items-center gap-3 p-3 rounded hover:bg-gray-800"
@@ -44,6 +53,7 @@ export default function Sidebar() {
           <FaPlus />
           Add Product
         </Link>
+      )}
 
          <button
           onClick={logout}

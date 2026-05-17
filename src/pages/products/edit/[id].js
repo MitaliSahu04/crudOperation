@@ -13,6 +13,7 @@ import {
   FaEdit,
   FaFileAlt,
 } from "react-icons/fa";
+import { getUser } from "../../../../lib/auth";
 
 export default function EditProduct() {
   const router = useRouter();
@@ -20,7 +21,8 @@ export default function EditProduct() {
   const { id } = router.query;
 
   const [loading, setLoading] = useState(true);
-
+  const [file, setFile] = useState(null);
+   const [preview, setPreview] =useState(null);
   const {
     register,
     handleSubmit,
@@ -34,6 +36,14 @@ export default function EditProduct() {
     }
   }, [id]);
 
+
+  useEffect(() => {
+  const user = getUser();
+
+  if (user?.role !== "admin") {
+    router.push("/products");
+  }
+}, []);
   const fetchProduct = async () => {
     try {
       const res = await api.get(`/products/${id}`);
@@ -46,17 +56,56 @@ export default function EditProduct() {
     }
   };
 
-  const onSubmit = async (data) => {
-    try {
-      await api.put(`/products/${id}`, data);
+  const handleImage = (e) => {
+  const selected =
+    e.target.files[0];
 
-      toast.success("Product updated successfully");
+  setFile(selected);
 
-      router.push("/products");
-    } catch (error) {
-      toast.error("Update failed");
+  setPreview(
+    URL.createObjectURL(selected)
+  );
+};
+
+const onSubmit = async (data) => {
+  try {
+    const formData = new FormData();
+
+    formData.append("name", data.name);
+
+    formData.append(
+      "price",
+      data.price
+    );
+
+    formData.append(
+      "description",
+      data.description
+    );
+
+    if (file) {
+      formData.append(
+        "image",
+        file
+      );
     }
-  };
+
+    await api.put(
+      `/products/${id}`,
+      formData
+    );
+
+    toast.success(
+      "Product updated"
+    );
+
+    router.push("/products");
+  } catch (error) {
+    toast.error(
+      "Update failed"
+    );
+  }
+};
 
   if (loading) {
     return (
@@ -176,12 +225,22 @@ export default function EditProduct() {
                 {...register("description")}
               />
             </div>
+                <div className="flex gap-4">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImage}
+                  className="mb-6"
+                />
+                </div>
+             
 
             <div className="flex gap-4">
               <button
                 type="submit"
                 className="bg-black text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-800 transition"
               >
+               
                 Update Product
               </button>
 

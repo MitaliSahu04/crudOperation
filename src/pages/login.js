@@ -23,22 +23,35 @@ export default function Login() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      const res = await api.post("/auth/login", data);
+const onSubmit = async (data) => {
+  try {
+    const res = await api.post(
+      "/auth/login",
+      data
+    );
 
-      localStorage.setItem("token", res.data.token);
+    localStorage.setItem(
+      "token",
+      res.data.token
+    );
 
-      toast.success("Login successful");
+    toast.success(
+      "Login successful"
+    );
 
-      router.push("/");
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-          "Login failed"
-      );
+    if (
+      res.data.user.role === "admin"
+    ) {
+      router.push("/admin");
+    } else {
+      router.push("/products");
     }
-  };
+  } catch (error) {
+    toast.error(
+      error.response?.data?.message
+    );
+  }
+};
 
   return (
     <div className="min-h-screen flex">

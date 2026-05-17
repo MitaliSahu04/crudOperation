@@ -100,6 +100,25 @@ export default function Register() {
             </p>
           </div>
 
+           <div className="mb-5">
+            <label className="block font-semibold mb-3">
+              Select Role
+            </label>
+
+            <select
+              className="w-full border border-gray-300 rounded-xl p-4"
+              {...register("role")}
+            >
+              <option value="user">
+                User
+              </option>
+
+              <option value="admin">
+                Admin
+              </option>
+            </select>
+          </div>
+
           <div className="mb-5">
             <label className="block font-semibold mb-3">
               Full Name
