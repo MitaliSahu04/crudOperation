@@ -2,7 +2,6 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react";
 import Layout from "../../../components/Layout";
 import api from "../../../lib/axios";
-import { useRouter } from "next/router";
 
 export default function ProductDetails() {
   const router = useRouter();
