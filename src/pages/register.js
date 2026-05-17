@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import api from "../../lib/axios";
 
 import toast from "react-hot-toast";
+import { Router } from "next/router";
 
 export default function Register() {
   const {
@@ -21,7 +22,7 @@ export default function Register() {
         "token",
         res.data.token
       );
-   window.location.href ="/products";
+   Router.push("/products");
     } catch (error) {
       toast.error(
         error.response?.data?.message
