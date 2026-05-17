@@ -1,4 +1,4 @@
-import { Router, useRouter } from "next/router";
+import {  useRouter } from "next/router";
 
 import {
   useEffect,
@@ -32,7 +32,7 @@ export default function EditProduct() {
       localStorage.getItem("token");
 
     if (!token) {
-     Router.push("/login");
+     router.push("/login");
     }
   }, []);
 

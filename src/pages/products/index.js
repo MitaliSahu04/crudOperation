@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-
 import Link from "next/link";
-
 import Layout from "../../../components/Layout";
-
 import api from "../../../lib/axios";
-
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 export default function ProductsPage() {
+  const router = useRouter();
   const [products, setProducts] =
     useState([]);
 
@@ -29,7 +27,7 @@ export default function ProductsPage() {
       localStorage.getItem("token");
 
     if (!token) {
-      Router.push("/login");
+      router.push("/login");
     }
   }, []);
 

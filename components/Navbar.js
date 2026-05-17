@@ -1,7 +1,9 @@
-import { Router } from "next/router";
+// import { Router } from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Navbar() {
+  const router = useRouter();
   const [user, setUser] =
     useState(null);
 
@@ -24,7 +26,7 @@ export default function Navbar() {
             "token"
           );
 
-         Router.push("/login");
+         router.push("/login");
         }}
         className="bg-black text-white px-5 py-2 rounded-lg"
       >

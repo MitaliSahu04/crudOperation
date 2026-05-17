@@ -1,10 +1,8 @@
-import { Router, useRouter } from "next/router";
-
+import { useRouter } from "next/router"
 import { useEffect, useState } from "react";
-
 import Layout from "../../../components/Layout";
-
 import api from "../../../lib/axios";
+import { useRouter } from "next/router";
 
 export default function ProductDetails() {
   const router = useRouter();
@@ -19,7 +17,7 @@ export default function ProductDetails() {
       localStorage.getItem("token");
 
     if (!token) {
-      Router.push("/login");
+      router.push("/login");
     }
   }, []);
 

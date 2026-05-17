@@ -1,11 +1,10 @@
 import { useForm } from "react-hook-form";
-
 import api from "../../lib/axios";
-
+import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import { Router } from "next/router";
 
 export default function Login() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -24,7 +23,7 @@ export default function Login() {
         res.data.token
       );
 
-      Router.push("/products");
+      router.push("/products");
     } catch (error) {
       toast.error(
         error.response?.data?.message

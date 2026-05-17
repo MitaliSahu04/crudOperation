@@ -1,11 +1,10 @@
 import { useForm } from "react-hook-form";
-
 import api from "../../lib/axios";
-
 import toast from "react-hot-toast";
-import { Router } from "next/router";
+import { useRouter } from "next/router";
 
 export default function Register() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -22,7 +21,7 @@ export default function Register() {
         "token",
         res.data.token
       );
-   Router.push("/products");
+      router.push("/products");
     } catch (error) {
       toast.error(
         error.response?.data?.message

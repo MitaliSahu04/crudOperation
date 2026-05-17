@@ -7,9 +7,11 @@ import Layout from "../../../components/Layout";
 import api from "../../../lib/axios";
 
 import toast from "react-hot-toast";
-import { Router } from "next/router";
+// import { Router } from "next/router";
+import { useRouter } from "next/router";
 
 export default function CreateProduct() {
+  const Router = useRouter();
   const {
     register,
     handleSubmit,
