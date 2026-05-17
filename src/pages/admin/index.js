@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import Layout from "../../../components/Layout";
 
 import { getUser } from "../../../lib/auth";
-import ProtectedRoute from "../../../components/ProtectedRoute";
 
 export default function AdminPage() {
   const router = useRouter();
@@ -21,7 +20,6 @@ export default function AdminPage() {
 
   return (
     <Layout>
-       <ProtectedRoute adminOnly>
       <div className="bg-white p-10 rounded-2xl shadow-sm">
         <h1 className="text-5xl font-bold mb-5">
           Admin Dashboard
@@ -32,7 +30,6 @@ export default function AdminPage() {
           page.
         </p>
       </div>
-      </ProtectedRoute>
     </Layout>
   );
 }

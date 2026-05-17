@@ -20,6 +20,7 @@ export default function ProductsPage() {
   const [totalPages, setTotalPages] =useState(1);
   const [user, setUser] =useState(null);
   const [checkingAuth, setCheckingAuth] =useState(true);
+  
 
   useEffect(() => {
 const token = localStorage.getItem("token");
