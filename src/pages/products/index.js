@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-
 import Link from "next/link";
-
 import Layout from "../../../components/Layout";
-
 import api from "../../../lib/axios";
 import { getUser } from "../../../lib/auth";
 
@@ -14,28 +11,35 @@ import {
   FaPlus,
   FaSearch,
 } from "react-icons/fa";
-import ProtectedRoute from "../../../components/ProtectedRoute";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
-
   const [loading, setLoading] = useState(true);
-
   const [search, setSearch] = useState("");
-
   const [page, setPage] = useState(1);
-
-  const [totalPages, setTotalPages] =
-    useState(1);
-
-  const [user, setUser] =
-  useState(null);
+  const [totalPages, setTotalPages] =useState(1);
+  const [user, setUser] =useState(null);
+  const [checkingAuth, setCheckingAuth] =useState(true);
 
   useEffect(() => {
+const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/login";
+    return;
+  }
+
     const currentUser = getUser();
     setUser(currentUser);
     fetchProducts();
+    setCheckingAuth(false);
   }, [page, search]);
+
+  useEffect(() => {
+  if (!checkingAuth) {
+    fetchProducts();
+  }
+}, [page, search, checkingAuth]);
+
   const fetchProducts = async () => {
     try {
       setLoading(true);
@@ -43,9 +47,7 @@ export default function ProductsPage() {
       const res = await api.get(
         `/products?page=${page}&search=${search}`
       );
-
       setProducts(res.data.products);
-
       setTotalPages(res.data.totalPages);
     } catch (error) {
       toast.error("Failed to load products");
@@ -68,9 +70,17 @@ export default function ProductsPage() {
     }
   };
 
+  if (checkingAuth) {
+  return (
+    <div className="min-h-screen flex justify-center items-center text-3xl font-bold">
+      Loading...
+    </div>
+  );
+}
+
   return (
     <Layout>
-      <ProtectedRoute>
+  
       <div>
         <div className="flex flex-col md:flex-row justify-between md:items-center mb-8 gap-4">
           <div>
@@ -230,7 +240,6 @@ export default function ProductsPage() {
           </>
         )}
       </div>
-    </ProtectedRoute>
     </Layout>
   );
 }
