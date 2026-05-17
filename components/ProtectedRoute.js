@@ -20,15 +20,6 @@ export default function ProtectedRoute({
 
     if (!user) {
       router.replace("/login");
-
-      return;
-    }
-
-    if (
-      adminOnly &&
-      user.role !== "admin"
-    ) {
-      router.replace("/products");
     }
   }, [user, loading]);
 
@@ -41,13 +32,6 @@ export default function ProtectedRoute({
   }
 
   if (!user) return null;
-
-  if (
-    adminOnly &&
-    user.role !== "admin"
-  ) {
-    return null;
-  }
 
   return children;
 }

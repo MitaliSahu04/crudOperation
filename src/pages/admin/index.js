@@ -17,9 +17,6 @@ export default function AdminPage() {
       router.push("/login");
     }
 
-    if (user?.role !== "admin") {
-      router.push("/products");
-    }
   }, []);
 
   return (

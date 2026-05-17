@@ -40,9 +40,7 @@ export default function EditProduct() {
   useEffect(() => {
   const user = getUser();
 
-  if (user?.role !== "admin") {
-    router.push("/products");
-  }
+ 
 }, []);
   const fetchProduct = async () => {
     try {
@@ -98,8 +96,6 @@ const onSubmit = async (data) => {
     toast.success(
       "Product updated"
     );
-
-    router.push("/products");
   } catch (error) {
     toast.error(
       "Update failed"
