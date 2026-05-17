@@ -2,9 +2,9 @@ import { useEffect } from "react";
 
 import { useRouter } from "next/router";
 
-import Layout from "../../components/Layout";
+import Layout from "../../../components/Layout";
 
-import { getUser } from "../../lib/auth";
+import { getUser } from "../../../lib/auth";
 
 export default function AdminPage() {
   const router = useRouter();
