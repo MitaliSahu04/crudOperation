@@ -1,67 +1,24 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
-import {
-  FaBox,
-  FaHome,
-  FaPlus,
-  FaSignOutAlt,
-} from "react-icons/fa";
-import { getUser } from "../lib/auth";
-import { useEffect, useState } from "react";
 
 export default function Sidebar() {
-  const router = useRouter();
-
-  const [user, setUser] =
-  useState(null);
-
-useEffect(() => {
-  setUser(getUser());
-}, []);
-
-  const logout = () => {
-    localStorage.removeItem("token");
-
-    router.push("/login");
-  };
-    return (
-    <div className="w-64 bg-black text-white min-h-screen p-5 hidden md:block">
-      <h1 className="text-2xl font-bold mb-10">
+  return (
+    <div className="w-64 bg-black text-white min-h-screen p-6">
+      <h1 className="text-3xl font-bold mb-10">
         CRUD APP
       </h1>
 
-      <div className="space-y-3">
-        <Link
-          href="/"
-          className="flex items-center gap-3 p-3 rounded hover:bg-gray-800 "
-        >
-          <FaHome />
-          Dashboard
+      <div className="flex flex-col gap-4">
+        <Link href="/products">
+          <div className="hover:bg-gray-800 p-3 rounded-lg cursor-pointer">
+            Products
+          </div>
         </Link>
-         <Link
-          href="/products"
-          className="flex items-center gap-3 p-3 rounded hover:bg-gray-800"
-        >
-          <FaBox />
-          Products
-        </Link>
-      {user?.role === "admin" && (
-        <Link
-          href="/products/create"
-          className="flex items-center gap-3 p-3 rounded hover:bg-gray-800"
-        >
-          <FaPlus />
-          Add Product
-        </Link>
-      )}
 
-         <button
-          onClick={logout}
-          className="flex items-center gap-3 p-3 rounded hover:bg-red-600 w-full text-left"
-        >
-          <FaSignOutAlt />
-          Logout
-        </button>
+        <Link href="/products/create">
+          <div className="hover:bg-gray-800 p-3 rounded-lg cursor-pointer">
+            Add Product
+          </div>
+        </Link>
       </div>
     </div>
   );

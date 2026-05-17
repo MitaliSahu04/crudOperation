@@ -1,48 +1,28 @@
-import { useEffect, useState } from "react";
-
 import { useForm } from "react-hook-form";
 
-import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 import Layout from "../../../components/Layout";
 
 import api from "../../../lib/axios";
-import { getUser } from "../../../lib/auth";
 
 import toast from "react-hot-toast";
+import { Router } from "next/router";
 
 export default function CreateProduct() {
-  const router = useRouter();
-
-  const [preview, setPreview] =
-    useState(null);
-
-  const [file, setFile] =
-    useState(null);
-
   const {
     register,
     handleSubmit,
   } = useForm();
 
   useEffect(() => {
-  const user = getUser();
+    const token =
+      localStorage.getItem("token");
 
-  if (user?.role !== "admin") {
-    router.push("/products");
-  }
-}, []);
-
-  const handleImage = (e) => {
-    const selected =
-      e.target.files[0];
-
-    setFile(selected);
-
-    setPreview(
-      URL.createObjectURL(selected)
-    );
-  };
+    if (!token) {
+      Router.push("/login");
+    }
+  }, []);
 
   const onSubmit = async (data) => {
     try {
@@ -63,12 +43,10 @@ export default function CreateProduct() {
         data.description
       );
 
-      if (file) {
-        formData.append(
-          "image",
-          file
-        );
-      }
+      formData.append(
+        "image",
+        data.image[0]
+      );
 
       await api.post(
         "/products",
@@ -78,69 +56,53 @@ export default function CreateProduct() {
       toast.success(
         "Product created"
       );
-
-      router.push("/products");
+      Router.push("/products");
     } catch (error) {
       toast.error(
-        "Failed to create product"
+        "Create failed"
       );
     }
   };
 
   return (
     <Layout>
-      <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-sm">
-        <h1 className="text-4xl font-bold mb-8 text-color">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-white p-8 rounded-2xl shadow-sm max-w-2xl"
+      >
+        <h1 className="text-4xl font-bold mb-8">
           Create Product
         </h1>
 
-        <form
-          onSubmit={handleSubmit(
-            onSubmit
-          )}
-        >
-          <input
-            placeholder="Product Name"
-            className="w-full border p-4 rounded-xl mb-5 text-color"
-            {...register("name")}
-          />
+        <input
+          placeholder="Product Name"
+          className="w-full border p-4 rounded-xl mb-4"
+          {...register("name")}
+        />
 
-          <input
-            type="number"
-            placeholder="Price"
-            className="w-full border p-4 rounded-xl mb-5 text-color"
-            {...register("price")}
-          />
+        <input
+          placeholder="Price"
+          type="number"
+          className="w-full border p-4 rounded-xl mb-4"
+          {...register("price")}
+        />
 
-          <textarea
-            rows="5"
-            placeholder="Description"
-            className="w-full border p-4 rounded-xl mb-5 text-color"
-            {...register(
-              "description"
-            )}
-          />
+        <textarea
+          placeholder="Description"
+          className="w-full border p-4 rounded-xl mb-4 h-40"
+          {...register("description")}
+        />
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImage}
-            className="mb-6 text-color"
-          />
+        <input
+          type="file"
+          className="w-full border p-4 rounded-xl mb-6"
+          {...register("image")}
+        />
 
-          {preview && (
-            <img
-              src={preview}
-              alt="preview"
-              className="w-40 h-40 object-cover rounded-xl mb-6"
-            />
-          )}
-
-          <button className="bg-black text-white px-8 py-4 rounded-xl">
-            Create Product
-          </button>
-        </form>
-      </div>
+        <button className="bg-black text-white px-6 py-4 rounded-xl font-semibold">
+          Create Product
+        </button>
+      </form>
     </Layout>
   );
 }

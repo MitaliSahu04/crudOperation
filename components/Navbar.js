@@ -1,40 +1,35 @@
+import { Router } from "next/router";
 import { useEffect, useState } from "react";
-
-import { getUser } from "../lib/auth";
 
 export default function Navbar() {
   const [user, setUser] =
     useState(null);
 
   useEffect(() => {
-    const currentUser = getUser();
+    const token =
+      localStorage.getItem("token");
 
-    setUser(currentUser);
+    setUser(token);
   }, []);
 
   return (
     <div className="bg-white px-6 py-4 shadow-sm flex justify-between items-center">
-      <h1 className="text-2xl font-bold text-color">
+      <h1 className="text-2xl font-bold">
         Dashboard
       </h1>
 
-      <div className="flex items-center gap-4">
-        <div className="text-right">
-          <p className="font-bold capitalize text-color">
-            {user?.role || "Guest"}
-          </p>
+      <button
+        onClick={() => {
+          localStorage.removeItem(
+            "token"
+          );
 
-          <p className="text-sm text-gray-500">
-            {user?.id
-              ? user.id.slice(0, 8)
-              : "No ID"}
-          </p>
-        </div>
-
-        <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center text-xl font-bold uppercase">
-          {user?.role?.charAt(0) || "G"}
-        </div>
-      </div>
+         Router.push("/login");
+        }}
+        className="bg-black text-white px-5 py-2 rounded-lg"
+      >
+        Logout
+      </button>
     </div>
   );
 }
