@@ -1,8 +1,10 @@
+import { useEffect } from "react";
+
 import { useRouter } from "next/router";
 
-import { useEffect, useState } from "react";
-
-import { getUser } from "../lib/auth";
+import {
+  useAuth,
+} from "./AuthProvider";
 
 export default function ProtectedRoute({
   children,
@@ -10,29 +12,19 @@ export default function ProtectedRoute({
 }) {
   const router = useRouter();
 
-  const [loading, setLoading] =
-    useState(true);
+  const { user, loading } =
+    useAuth();
 
   useEffect(() => {
-    const user = getUser();
-
-    if (!user) {
-      router.replace("/login");
-
-      return;
-    }
+    if (loading) return;
 
     if (
       adminOnly &&
       user.role !== "admin"
     ) {
       router.replace("/products");
-
-      return;
     }
-
-    setLoading(false);
-  }, []);
+  }, [user, loading]);
 
   if (loading) {
     return (
@@ -40,6 +32,15 @@ export default function ProtectedRoute({
         Loading...
       </div>
     );
+  }
+
+  if (!user) return null;
+
+  if (
+    adminOnly &&
+    user.role !== "admin"
+  ) {
+    return null;
   }
 
   return children;
