@@ -70,7 +70,7 @@ const onSubmit = async (data) => {
           <div className="flex items-center gap-4">
             <div className="w-4 h-4 rounded-full bg-white"></div>
 
-            <p className="text-color">JWT Authentication</p>
+            <p >JWT Authentication</p>
           </div>
 
           <div className="flex items-center gap-4">

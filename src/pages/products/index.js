@@ -14,6 +14,7 @@ import {
   FaPlus,
   FaSearch,
 } from "react-icons/fa";
+import ProtectedRoute from "../../../components/ProtectedRoute";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -69,6 +70,7 @@ export default function ProductsPage() {
 
   return (
     <Layout>
+      <ProtectedRoute>
       <div>
         <div className="flex flex-col md:flex-row justify-between md:items-center mb-8 gap-4">
           <div>
@@ -228,6 +230,7 @@ export default function ProductsPage() {
           </>
         )}
       </div>
+    </ProtectedRoute>
     </Layout>
   );
 }

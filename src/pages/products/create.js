@@ -10,6 +10,7 @@ import api from "../../../lib/axios";
 import { getUser } from "../../../lib/auth";
 
 import toast from "react-hot-toast";
+import ProtectedRoute from "../../../components/ProtectedRoute";
 
 export default function CreateProduct() {
   const router = useRouter();
@@ -89,6 +90,7 @@ export default function CreateProduct() {
 
   return (
     <Layout>
+      <ProtectedRoute adminOnly>
       <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-sm">
         <h1 className="text-4xl font-bold mb-8 text-color">
           Create Product
@@ -141,6 +143,7 @@ export default function CreateProduct() {
           </button>
         </form>
       </div>
+      </ProtectedRoute>
     </Layout>
   );
 }
