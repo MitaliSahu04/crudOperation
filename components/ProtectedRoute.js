@@ -18,6 +18,12 @@ export default function ProtectedRoute({
   useEffect(() => {
     if (loading) return;
 
+    if (!user) {
+      router.replace("/login");
+
+      return;
+    }
+
     if (
       adminOnly &&
       user.role !== "admin"
