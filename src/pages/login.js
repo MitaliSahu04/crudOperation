@@ -41,9 +41,8 @@ const onSubmit = async (data) => {
 
     if (
       res.data.user.role === "admin"
-    ) {
-      router.push("/admin");
-    } else {
+    ) 
+    {
       router.push("/products");
     }
   } catch (error) {
