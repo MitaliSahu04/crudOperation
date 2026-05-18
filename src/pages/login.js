@@ -74,89 +74,109 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-center items-center px-4">
-      <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-2xl">
-        {/* Heading */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800">
-            Welcome Back
-          </h1>
+  <div className="min-h-screen bg-gray-100 flex">
+      {/* Left Side */}
+      <div className="hidden lg:flex w-1/2 bg-black text-white flex-col justify-center px-20">
+        <h1 className="text-6xl text-color font-bold leading-tight mb-6 text-white">
+          Welcome
+          <br />
+          Back
+        </h1>
 
-          <p className="text-gray-500 mt-2">
-            Login to your account
+        <p className="text-xl text-color text-gray-300 leading-relaxed">
+          Login to manage your products,
+          dashboard, and secure CRUD
+          application.
+        </p>
+      </div>
+
+      {/* Right Side */}
+      <div className="w-full lg:w-1/2 flex justify-center items-center px-6">
+        <div className="bg-white w-full max-w-md p-10 rounded-3xl shadow-xl">
+          {/* Heading */}
+          <div className="mb-8">
+            <h2 className="text-4xl font-bold mb-2">
+              Login
+            </h2>
+
+            <p className="text-gray-500">
+              Enter your credentials to continue
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            {/* Email */}
+            <div className="mb-5">
+              <label className="block mb-2 font-semibold">
+                Email Address
+              </label>
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-4 rounded-xl focus:border-black"
+              />
+
+              {errors.email && (
+                <p className="text-red-500 mt-1">
+                  {errors.email}
+                </p>
+              )}
+            </div>
+
+            {/* Password */}
+            <div className="mb-6">
+              <label className="block mb-2 font-semibold">
+                Password
+              </label>
+
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-4 rounded-xl focus:border-black"
+              />
+
+              {errors.password && (
+                <p className="text-red-500 mt-1">
+                  {errors.password}
+                </p>
+              )}
+            </div>
+
+            {/* Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-4 rounded-xl font-semibold text-lg ${
+                loading
+                  ? 'bg-gray-400 text-white'
+                  : 'bg-black text-white hover:bg-gray-800'
+              }`}
+            >
+              {loading
+                ? 'Logging in...'
+                : 'Login'}
+            </button>
+          </form>
+
+          {/* Footer */}
+          <p className="text-center mt-6 text-gray-600">
+            Don’t have an account?{' '}
+            <Link
+              href="/register"
+              className="font-bold hover:underline"
+            >
+              Register
+            </Link>
           </p>
         </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit}>
-          {/* Email */}
-          <div className="mb-5">
-            <label className="block text-gray-700 font-semibold mb-2">
-              Email Address
-            </label>
-
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-
-            {errors.email && (
-              <p className="text-red-500 mt-1">
-                {errors.email}
-              </p>
-            )}
-          </div>
-
-          {/* Password */}
-          <div className="mb-6">
-            <label className="block text-gray-700 font-semibold mb-2">
-              Password
-            </label>
-
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-
-            {errors.password && (
-              <p className="text-red-500 mt-1">
-                {errors.password}
-              </p>
-            )}
-          </div>
-
-          {/* Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-3 rounded-lg text-white font-semibold transition ${
-              loading
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700'
-            }`}
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-
-        {/* Footer */}
-        <p className="text-center text-gray-600 mt-6">
-          Don’t have an account?{' '}
-          <Link
-            href="/register"
-            className="text-blue-600 font-semibold hover:underline"
-          >
-            Register
-          </Link>
-        </p>
       </div>
     </div>
   );

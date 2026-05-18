@@ -27,3 +27,35 @@ body {
 .text-color{
   color: #2a2121 !important;
 }
+
+
+
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a,
+label,
+input,
+textarea {
+  color: black;
+}
+
+/* Input Styling */
+
+input,
+textarea {
+  outline: none;
+}
+
+/* Smooth Transition */
+
+* {
+  transition: all 0.2s ease;
+}
+
+.text-color {
+  color: #c6c4c4 !important;
+}

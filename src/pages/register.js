@@ -79,111 +79,131 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-500 to-pink-500 flex justify-center items-center px-4">
-      <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-2xl">
-        {/* Heading */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800">
-            Create Account
-          </h1>
+   <div className="min-h-screen bg-gray-100 flex">
+      {/* Left Side */}
+      <div className="hidden lg:flex w-1/2 bg-black text-white flex-col justify-center px-20">
+        <h1 className="text-6xl text-color font-bold leading-tight mb-6 text-white">
+          Create
+          <br />
+          Account
+        </h1>
 
-          <p className="text-gray-500 mt-2">
-            Register to continue
+        <p className="text-xl text-color text-gray-300 leading-relaxed">
+          Register to access your dashboard,
+          products, and CRUD management
+          system.
+        </p>
+      </div>
+
+      {/* Right Side */}
+      <div className="w-full lg:w-1/2 flex justify-center items-center px-6">
+        <div className="bg-white w-full max-w-md p-10 rounded-3xl shadow-xl">
+          {/* Heading */}
+          <div className="mb-8">
+            <h2 className="text-4xl font-bold mb-2">
+              Register
+            </h2>
+
+            <p className="text-gray-500">
+              Create your new account
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            {/* Name */}
+            <div className="mb-5">
+              <label className="block mb-2 font-semibold">
+                Full Name
+              </label>
+
+              <input
+                type="text"
+                name="name"
+                placeholder="Enter your full name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-4 rounded-xl focus:border-black"
+              />
+
+              {errors.name && (
+                <p className="text-red-500 mt-1">
+                  {errors.name}
+                </p>
+              )}
+            </div>
+
+            {/* Email */}
+            <div className="mb-5">
+              <label className="block mb-2 font-semibold">
+                Email Address
+              </label>
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-4 rounded-xl focus:border-black"
+              />
+
+              {errors.email && (
+                <p className="text-red-500 mt-1">
+                  {errors.email}
+                </p>
+              )}
+            </div>
+
+            {/* Password */}
+            <div className="mb-6">
+              <label className="block mb-2 font-semibold">
+                Password
+              </label>
+
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-4 rounded-xl focus:border-black"
+              />
+
+              {errors.password && (
+                <p className="text-red-500 mt-1">
+                  {errors.password}
+                </p>
+              )}
+            </div>
+
+            {/* Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-4 rounded-xl font-semibold text-lg ${
+                loading
+                  ? 'bg-gray-400 text-white'
+                  : 'bg-black text-white hover:bg-gray-800'
+              }`}
+            >
+              {loading
+                ? 'Creating Account...'
+                : 'Register'}
+            </button>
+          </form>
+
+          {/* Footer */}
+          <p className="text-center mt-6 text-gray-600">
+            Already have an account?{' '}
+            <Link
+              href="/login"
+              className="font-bold hover:underline"
+            >
+              Login
+            </Link>
           </p>
         </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit}>
-          {/* Name */}
-          <div className="mb-5">
-            <label className="block text-gray-700 font-semibold mb-2">
-              Full Name
-            </label>
-
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter your name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-
-            {errors.name && (
-              <p className="text-red-500 mt-1">
-                {errors.name}
-              </p>
-            )}
-          </div>
-
-          {/* Email */}
-          <div className="mb-5">
-            <label className="block text-gray-700 font-semibold mb-2">
-              Email Address
-            </label>
-
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-
-            {errors.email && (
-              <p className="text-red-500 mt-1">
-                {errors.email}
-              </p>
-            )}
-          </div>
-
-          {/* Password */}
-          <div className="mb-6">
-            <label className="block text-gray-700 font-semibold mb-2">
-              Password
-            </label>
-
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-
-            {errors.password && (
-              <p className="text-red-500 mt-1">
-                {errors.password}
-              </p>
-            )}
-          </div>
-
-          {/* Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-3 rounded-lg text-white font-semibold transition ${
-              loading
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-purple-600 hover:bg-purple-700'
-            }`}
-          >
-            {loading ? 'Creating Account...' : 'Register'}
-          </button>
-        </form>
-
-        {/* Footer */}
-        <p className="text-center text-gray-600 mt-6">
-          Already have an account?{' '}
-          <Link
-            href="/login"
-            className="text-purple-600 font-semibold hover:underline"
-          >
-            Login
-          </Link>
-        </p>
       </div>
     </div>
   );

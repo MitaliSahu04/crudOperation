@@ -1,14 +1,25 @@
 // frontend/pages/dashboard.js
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import { useRouter } from 'next/router';
+
 import Navbar from '../../components/Navbar';
+import Loader from '../../components/Loader';
+
 import { useAuth } from '../../context/AuthContext';
+
+import api from '../../services/api';
 
 export default function Dashboard() {
   const router = useRouter();
 
   const { user, loading } = useAuth();
+
+  const [products, setProducts] = useState([]);
+
+  const [pageLoading, setPageLoading] =
+    useState(true);
 
   // Protect Route
   useEffect(() => {
@@ -17,13 +28,26 @@ export default function Dashboard() {
     }
   }, [user, loading]);
 
-  // Loading State
-  if (loading) {
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-gray-100">
-        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
+  // Fetch Products
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const res = await api.get('/products');
+
+      setProducts(res.data.products || []);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setPageLoading(false);
+    }
+  };
+
+  // Loader
+  if (loading || pageLoading) {
+    return <Loader />;
   }
 
   return (
@@ -31,124 +55,195 @@ export default function Dashboard() {
       {/* Navbar */}
       <Navbar />
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto p-6">
-        {/* Welcome Card */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-lg p-8 mb-8">
-          <h1 className="text-4xl font-bold mb-2">
-            Welcome, {user?.name}
-          </h1>
+      {/* Main Container */}
+      <div className="max-w-7xl mx-auto px-6 py-10">
+        {/* Hero Section */}
+        <div className="bg-white rounded-3xl shadow-md p-10 mb-10">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+            {/* Left */}
+            <div>
+              <h1 className="text-5xl font-bold mb-4">
+                Welcome,
+                <span className="ml-3">
+                  {user?.name}
+                </span>
+              </h1>
 
-          <p className="text-lg opacity-90">
-            Manage your products and monitor your dashboard.
-          </p>
+              <p className="text-gray-600 text-lg leading-relaxed max-w-2xl">
+                Manage your products, create
+                new inventory, update product
+                details, and monitor your CRUD
+                application dashboard.
+              </p>
+
+              <div className="flex flex-wrap gap-4 mt-8">
+                <button
+                  onClick={() =>
+                    router.push('/products')
+                  }
+                  className="bg-black text-white px-8 py-4 rounded-2xl hover:bg-gray-800"
+                >
+                  View Products
+                </button>
+
+                <button
+                  onClick={() =>
+                    router.push(
+                      '/products/create'
+                    )
+                  }
+                  className="border border-black px-8 py-4 rounded-2xl hover:bg-black hover:text-white"
+                >
+                  Create Product
+                </button>
+              </div>
+            </div>
+
+            {/* Right */}
+            <div className="bg-gray-100 rounded-3xl p-8 min-w-[300px]">
+              <h2 className="text-3xl font-bold mb-6">
+                Account Info
+              </h2>
+
+              <div className="space-y-5">
+                <div>
+                  <p className="text-gray-500 mb-1">
+                    Full Name
+                  </p>
+
+                  <h3 className="text-xl font-bold">
+                    {user?.name}
+                  </h3>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 mb-1">
+                    Email Address
+                  </p>
+
+                  <h3 className="text-xl font-bold">
+                    {user?.email}
+                  </h3>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 mb-1">
+                    Role
+                  </p>
+
+                  <h3 className="text-xl font-bold capitalize">
+                    {user?.role || 'User'}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Card 1 */}
-          <div className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
-            <h2 className="text-gray-500 text-lg mb-2">
-              Total Products
-            </h2>
+        {/* Products Section */}
+        <div className="bg-white rounded-3xl shadow-md p-8">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h2 className="text-4xl font-bold">
+                Recent Products
+              </h2>
 
-            <p className="text-4xl font-bold text-blue-600">
-              120
-            </p>
-          </div>
-
-          {/* Card 2 */}
-          <div className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
-            <h2 className="text-gray-500 text-lg mb-2">
-              Active Users
-            </h2>
-
-            <p className="text-4xl font-bold text-green-600">
-              45
-            </p>
-          </div>
-
-          {/* Card 3 */}
-          <div className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
-            <h2 className="text-gray-500 text-lg mb-2">
-              Revenue
-            </h2>
-
-            <p className="text-4xl font-bold text-purple-600">
-              $12K
-            </p>
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="bg-white p-8 rounded-2xl shadow-md">
-          <h2 className="text-2xl font-bold mb-6">
-            Quick Actions
-          </h2>
-
-          <div className="flex flex-wrap gap-4">
-            <button
-              onClick={() => router.push('/products')}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition"
-            >
-              View Products
-            </button>
+              <p className="text-gray-500 mt-2">
+                Latest products from your
+                database
+              </p>
+            </div>
 
             <button
               onClick={() =>
-                router.push('/products/create')
+                router.push('/products')
               }
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl transition"
+              className="bg-black text-white px-6 py-3 rounded-xl hover:bg-gray-800"
             >
-              Add Product
-            </button>
-
-            <button
-              onClick={() => router.push('/profile')}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl transition"
-            >
-              Profile
+              See All
             </button>
           </div>
-        </div>
 
-        {/* Recent Activity */}
-        <div className="bg-white p-8 rounded-2xl shadow-md mt-8">
-          <h2 className="text-2xl font-bold mb-6">
-            Recent Activity
-          </h2>
+          {/* Empty State */}
+          {products.length === 0 ? (
+            <div className="bg-gray-100 rounded-2xl p-16 text-center">
+              <h2 className="text-3xl font-bold mb-4">
+                No Products Found
+              </h2>
 
-          <div className="space-y-4">
-            <div className="border-b pb-4">
-              <p className="font-semibold">
-                New Product Added
+              <p className="text-gray-600 mb-8">
+                Start by creating your first
+                product.
               </p>
 
-              <p className="text-gray-500 text-sm">
-                Product added successfully to inventory
-              </p>
+              <button
+                onClick={() =>
+                  router.push(
+                    '/products/create'
+                  )
+                }
+                className="bg-black text-white px-8 py-4 rounded-2xl"
+              >
+                Create Product
+              </button>
             </div>
+          ) : (
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+              {products
+                .slice(0, 6)
+                .map((product) => (
+                  <div
+                    key={product._id}
+                    className="border border-gray-200 rounded-3xl overflow-hidden hover:shadow-xl"
+                  >
+                    {/* Image */}
+                    {product.image ? (
+                      <img
+                        src={`http://localhost:5000/uploads/${product.image}`}
+                        alt={product.title}
+                        className="w-full h-60 object-cover"
+                      />
+                    ) : (
+                      <div className="h-60 bg-gray-200 flex justify-center items-center">
+                        <span className="text-gray-500">
+                          No Image
+                        </span>
+                      </div>
+                    )}
 
-            <div className="border-b pb-4">
-              <p className="font-semibold">
-                User Logged In
-              </p>
+                    {/* Content */}
+                    <div className="p-6">
+                      <h3 className="text-2xl font-bold mb-3">
+                        {product.title}
+                      </h3>
 
-              <p className="text-gray-500 text-sm">
-                Admin logged into dashboard
-              </p>
+                      <p className="text-gray-600 mb-5 line-clamp-3">
+                        {product.description}
+                      </p>
+
+                      <div className="flex justify-between items-center">
+                        <h4 className="text-3xl font-bold">
+                          $
+                          {product.price}
+                        </h4>
+
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/products/${product._id}`
+                            )
+                          }
+                          className="bg-black text-white px-5 py-2 rounded-xl hover:bg-gray-800"
+                        >
+                          View
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
             </div>
-
-            <div>
-              <p className="font-semibold">
-                Product Updated
-              </p>
-
-              <p className="text-gray-500 text-sm">
-                Product details updated successfully
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
