@@ -44,7 +44,7 @@ export default function EditProduct() {
 
       if (res.data.image) {
         setPreview(
-          `http://localhost:5000/uploads/${res.data.image}`
+          `https://backendforcrude.onrender.com/uploads/${res.data.image}`
         );
       }
     } catch (error) {

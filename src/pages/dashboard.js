@@ -200,7 +200,7 @@ export default function Dashboard() {
                     {/* Image */}
                     {product.image ? (
                       <img
-                        src={`http://localhost:5000/uploads/${product.image}`}
+                        src={`https://backendforcrude.onrender.com/uploads/${product.image}`}
                         alt={product.title}
                         className="w-full h-60 object-cover"
                       />

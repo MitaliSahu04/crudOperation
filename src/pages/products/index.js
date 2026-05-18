@@ -26,7 +26,7 @@ export default function Products() {
       const res = await api.get(
         `/products?search=${search}&page=${page}`
       );
-
+     console.log(res.data);
       setProducts(res.data.products);
       setTotalPages(res.data.totalPages);
     } catch (error) {
@@ -124,7 +124,7 @@ export default function Products() {
                   {/* Product Image */}
                   {product.image ? (
                     <img
-                      src={`http://localhost:5000/uploads/${product.image}`}
+                      src={`https://backendforcrude.onrender.com/uploads/${product.image}`}
                       alt={product.title}
                       className="h-56 w-full object-cover"
                     />
