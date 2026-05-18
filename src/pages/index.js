@@ -69,7 +69,7 @@ export default function Home() {
             <div className="grid grid-cols-2 gap-6">
               {/* Card */}
               <div className="bg-gray-100 p-6 rounded-2xl">
-                <h2 className="text-4xl font-bold mb-2">
+                <h2 className="text-4xl text-color font-bold mb-2">
                   JWT
                 </h2>
 
@@ -80,7 +80,7 @@ export default function Home() {
 
               {/* Card */}
               <div className="bg-gray-100 p-6 rounded-2xl">
-                <h2 className="text-4xl font-bold mb-2">
+                <h2 className="text-4xl text-color font-bold mb-2">
                   CRUD
                 </h2>
 
@@ -91,7 +91,7 @@ export default function Home() {
 
               {/* Card */}
               <div className="bg-gray-100 p-6 rounded-2xl">
-                <h2 className="text-4xl font-bold mb-2">
+                <h2 className="text-4xl text-color font-bold mb-2">
                   API
                 </h2>
 
@@ -102,7 +102,7 @@ export default function Home() {
 
               {/* Card */}
               <div className="bg-gray-100 p-6 rounded-2xl">
-                <h2 className="text-4xl font-bold mb-2">
+                <h2 className="text-4xl text-color font-bold mb-2">
                   UI
                 </h2>
 
@@ -117,7 +117,7 @@ export default function Home() {
 
       {/* Features */}
       <section className="max-w-7xl mx-auto px-6 pb-20">
-        <h2 className="text-4xl font-bold text-center mb-14">
+        <h2 className="text-4xl text-color font-bold text-center mb-14">
           Application Features
         </h2>
 
