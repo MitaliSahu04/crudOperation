@@ -1,188 +1,224 @@
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import Layout from "../../../components/Layout";
-import api from "../../../lib/axios";
-import toast from "react-hot-toast";
-import { useRouter } from "next/router";
+// frontend/pages/products/index.js
 
-export default function ProductsPage() {
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import Navbar from '../../../components/Navbar';
+import Loader from '../../../components/Loader';
+import api from '../../../services/api';
+
+export default function Products() {
   const router = useRouter();
-  const [products, setProducts] =
-    useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [search, setSearch] =
-    useState("");
-
-  const [page, setPage] =
-    useState(1);
-
-  const [totalPages, setTotalPages] =
-    useState(1);
-
-  useEffect(() => {
-    const token =
-      localStorage.getItem("token");
-
-    if (!token) {
-      router.push("/login");
-    }
-  }, []);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchProducts();
-  }, [page, search]);
+  }, [search, page]);
 
   const fetchProducts = async () => {
     try {
+      setLoading(true);
+
       const res = await api.get(
-        `/products?page=${page}&search=${search}`
+        `/products?search=${search}&page=${page}`
       );
 
       setProducts(res.data.products);
-
-      setTotalPages(
-        res.data.totalPages
-      );
+      setTotalPages(res.data.totalPages);
     } catch (error) {
-      toast.error(
-        "Failed to load products"
-      );
+      console.log(error);
+      alert('Failed to load products');
     } finally {
       setLoading(false);
     }
   };
 
-  const deleteProduct = async (id) => {
-    if (!confirm("Delete product?"))
-      return;
+  const handleDelete = async (id) => {
+    const confirmDelete = confirm(
+      'Are you sure you want to delete this product?'
+    );
+
+    if (!confirmDelete) return;
 
     try {
-      await api.delete(
-        `/products/${id}`
-      );
-
-      toast.success(
-        "Product deleted"
-      );
+      await api.delete(`/products/${id}`);
 
       fetchProducts();
     } catch (error) {
-      toast.error("Delete failed");
+      console.log(error);
+      alert('Delete failed');
     }
   };
 
+  if (loading) return <Loader />;
+
   return (
-    <Layout>
-      <div>
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-4xl font-bold">
-            Products
-          </h1>
+    <div className="min-h-screen bg-gray-100">
+      <Navbar />
 
-          <Link href="/products/create">
-            <button className="bg-black text-white px-6 py-3 rounded-xl">
-              Add Product
+      <div className="max-w-7xl mx-auto p-6">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-800">
+              Products
+            </h1>
+
+            <p className="text-gray-500 mt-1">
+              Manage your products easily
+            </p>
+          </div>
+
+          <div className="flex gap-3">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
+              className="border border-gray-300 px-4 py-2 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <button
+              onClick={() => router.push('/products/create')}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg"
+            >
+              + Add Product
             </button>
-          </Link>
+          </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl shadow-sm mb-6">
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="w-full border p-3 rounded-lg"
-            value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
-            }
-          />
-        </div>
+        {/* Empty State */}
+        {products.length === 0 ? (
+          <div className="bg-white p-10 rounded-2xl shadow-md text-center">
+            <h2 className="text-2xl font-bold mb-2">
+              No Products Found
+            </h2>
 
-        {loading ? (
-          <div className="text-center text-3xl font-bold py-20">
-            Loading...
+            <p className="text-gray-500 mb-5">
+              Start by creating your first product.
+            </p>
+
+            <button
+              onClick={() => router.push('/products/create')}
+              className="bg-blue-600 text-white px-5 py-2 rounded-lg"
+            >
+              Create Product
+            </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => (
-              <div
-                key={product._id}
-                className="bg-white rounded-2xl p-5 shadow-sm"
-              >
-                <img
-                  src={`${process.env.NEXT_PUBLIC_API_URL.replace(
-                    "/api",
-                    ""
-                  )}/uploads/${product.image}`}
-                  className="w-full h-52 object-cover rounded-xl mb-4"
-                />
+          <>
+            {/* Product Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product) => (
+                <div
+                  key={product._id}
+                  className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition"
+                >
+                  {/* Product Image */}
+                  {product.image ? (
+                    <img
+                      src={`http://localhost:5000/uploads/${product.image}`}
+                      alt={product.title}
+                      className="h-56 w-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-56 bg-gray-200 flex items-center justify-center">
+                      <span className="text-gray-500">
+                        No Image
+                      </span>
+                    </div>
+                  )}
 
-                <h2 className="text-2xl font-bold mb-2">
-                  {product.name}
-                </h2>
+                  {/* Product Info */}
+                  <div className="p-5">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                      {product.title}
+                    </h2>
 
-                <p className="text-gray-500 mb-3">
-                  ${product.price}
-                </p>
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      {product.description}
+                    </p>
 
-                <p className="text-gray-600 mb-5 line-clamp-3">
-                  {product.description}
-                </p>
+                    <p className="text-2xl font-bold text-blue-600 mb-5">
+                      ${product.price}
+                    </p>
 
-                <div className="flex gap-3 flex-wrap">
-                  <Link
-                    href={`/products/${product._id}`}
-                  >
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">
-                      View
-                    </button>
-                  </Link>
+                    {/* Buttons */}
+                    <div className="flex flex-wrap gap-3">
+                      <button
+                        onClick={() =>
+                          router.push(`/products/${product._id}`)
+                        }
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+                      >
+                        View
+                      </button>
 
-                  <Link
-                    href={`/products/edit/${product._id}`}
-                  >
-                    <button className="bg-yellow-500 text-white px-4 py-2 rounded-lg">
-                      Edit
-                    </button>
-                  </Link>
+                      <button
+                        onClick={() =>
+                          router.push(
+                            `/products/edit/${product._id}`
+                          )
+                        }
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg"
+                      >
+                        Edit
+                      </button>
 
-                  <button
-                    onClick={() =>
-                      deleteProduct(product._id)
-                    }
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg"
-                  >
-                    Delete
-                  </button>
+                      <button
+                        onClick={() =>
+                          handleDelete(product._id)
+                        }
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
 
-        <div className="flex justify-center gap-3 mt-10">
-          {[...Array(totalPages)].map(
-            (_, index) => (
+            {/* Pagination */}
+            <div className="flex justify-center items-center gap-3 mt-10">
               <button
-                key={index}
-                onClick={() =>
-                  setPage(index + 1)
-                }
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
                 className={`px-4 py-2 rounded-lg ${
-                  page === index + 1
-                    ? "bg-black text-white"
-                    : "bg-white"
+                  page === 1
+                    ? 'bg-gray-300 cursor-not-allowed'
+                    : 'bg-blue-600 text-white'
                 }`}
               >
-                {index + 1}
+                Previous
               </button>
-            )
-          )}
-        </div>
+
+              <span className="font-semibold">
+                Page {page} of {totalPages}
+              </span>
+
+              <button
+                disabled={page === totalPages}
+                onClick={() => setPage(page + 1)}
+                className={`px-4 py-2 rounded-lg ${
+                  page === totalPages
+                    ? 'bg-gray-300 cursor-not-allowed'
+                    : 'bg-blue-600 text-white'
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          </>
+        )}
       </div>
-    </Layout>
+    </div>
   );
 }

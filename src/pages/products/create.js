@@ -1,110 +1,236 @@
-import { useForm } from "react-hook-form";
+// frontend/pages/products/create.js
 
-import { useEffect } from "react";
-
-import Layout from "../../../components/Layout";
-
-import api from "../../../lib/axios";
-
-import toast from "react-hot-toast";
-// import { Router } from "next/router";
-import { useRouter } from "next/router";
-
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import Navbar from '../../../components/Navbar';
+import api from '../../../services/api';
 export default function CreateProduct() {
-  const Router = useRouter();
-  const {
-    register,
-    handleSubmit,
-  } = useForm();
+  const router = useRouter();
 
-  useEffect(() => {
-    const token =
-      localStorage.getItem("token");
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    price: '',
+  });
 
-    if (!token) {
-      Router.push("/login");
+  const [image, setImage] = useState(null);
+
+  const [preview, setPreview] = useState('');
+
+  const [loading, setLoading] = useState(false);
+
+  const [errors, setErrors] = useState({});
+
+  // Handle Input Change
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Handle Image Upload
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+
+    setImage(file);
+
+    if (file) {
+      setPreview(URL.createObjectURL(file));
     }
-  }, []);
+  };
 
-  const onSubmit = async (data) => {
+  // Form Validation
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!formData.title.trim()) {
+      newErrors.title = 'Title is required';
+    }
+
+    if (!formData.price) {
+      newErrors.price = 'Price is required';
+    }
+
+    if (formData.price <= 0) {
+      newErrors.price = 'Price must be greater than 0';
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Submit Form
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
     try {
-      const formData = new FormData();
+      setLoading(true);
 
-      formData.append(
-        "name",
-        data.name
-      );
+      const data = new FormData();
 
-      formData.append(
-        "price",
-        data.price
-      );
+      data.append('title', formData.title);
+      data.append('description', formData.description);
+      data.append('price', formData.price);
 
-      formData.append(
-        "description",
-        data.description
-      );
+      if (image) {
+        data.append('image', image);
+      }
 
-      formData.append(
-        "image",
-        data.image[0]
-      );
+      await api.post('/products', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
-      await api.post(
-        "/products",
-        formData
-      );
+      alert('Product created successfully');
 
-      toast.success(
-        "Product created"
-      );
-      Router.push("/products");
+      router.push('/products');
     } catch (error) {
-      toast.error(
-        "Create failed"
+      console.log(error);
+
+      alert(
+        error.response?.data?.message ||
+          'Failed to create product'
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Layout>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-8 rounded-2xl shadow-sm max-w-2xl"
-      >
-        <h1 className="text-4xl font-bold mb-8">
-          Create Product
-        </h1>
+    <div className="min-h-screen bg-gray-100">
+      <Navbar />
 
-        <input
-          placeholder="Product Name"
-          className="w-full border p-4 rounded-xl mb-4"
-          {...register("name")}
-        />
+      <div className="max-w-3xl mx-auto py-10 px-5">
+        {/* Card */}
+        <div className="bg-white shadow-xl rounded-2xl p-8">
+          {/* Heading */}
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold text-gray-800">
+              Create Product
+            </h1>
 
-        <input
-          placeholder="Price"
-          type="number"
-          className="w-full border p-4 rounded-xl mb-4"
-          {...register("price")}
-        />
+            <p className="text-gray-500 mt-2">
+              Add a new product to your store
+            </p>
+          </div>
 
-        <textarea
-          placeholder="Description"
-          className="w-full border p-4 rounded-xl mb-4 h-40"
-          {...register("description")}
-        />
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            {/* Product Title */}
+            <div className="mb-5">
+              <label className="block text-gray-700 font-semibold mb-2">
+                Product Title
+              </label>
 
-        <input
-          type="file"
-          className="w-full border p-4 rounded-xl mb-6"
-          {...register("image")}
-        />
+              <input
+                type="text"
+                name="title"
+                placeholder="Enter product title"
+                value={formData.title}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
 
-        <button className="bg-black text-white px-6 py-4 rounded-xl font-semibold">
-          Create Product
-        </button>
-      </form>
-    </Layout>
+              {errors.title && (
+                <p className="text-red-500 mt-1">
+                  {errors.title}
+                </p>
+              )}
+            </div>
+
+            {/* Description */}
+            <div className="mb-5">
+              <label className="block text-gray-700 font-semibold mb-2">
+                Description
+              </label>
+
+              <textarea
+                name="description"
+                rows="5"
+                placeholder="Enter product description"
+                value={formData.description}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Price */}
+            <div className="mb-5">
+              <label className="block text-gray-700 font-semibold mb-2">
+                Price
+              </label>
+
+              <input
+                type="number"
+                name="price"
+                placeholder="Enter product price"
+                value={formData.price}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+
+              {errors.price && (
+                <p className="text-red-500 mt-1">
+                  {errors.price}
+                </p>
+              )}
+            </div>
+
+            {/* Image Upload */}
+            <div className="mb-6">
+              <label className="block text-gray-700 font-semibold mb-2">
+                Product Image
+              </label>
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImage}
+                className="w-full"
+              />
+
+              {/* Image Preview */}
+              {preview && (
+                <div className="mt-4">
+                  <img
+                    src={preview}
+                    alt="preview"
+                    className="h-52 w-full object-cover rounded-xl border"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className={`px-6 py-3 rounded-lg text-white font-semibold ${
+                  loading
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700'
+                }`}
+              >
+                {loading ? 'Creating...' : 'Create Product'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => router.push('/products')}
+                className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }

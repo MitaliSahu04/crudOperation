@@ -5,7 +5,7 @@ import {
   useState,
 } from "react";
 
-import { getUser } from "../lib/auth";
+import { getUser } from "../services/api";
 
 const AuthContext =
   createContext();

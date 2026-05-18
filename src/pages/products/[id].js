@@ -1,24 +1,21 @@
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react";
-import Layout from "../../../components/Layout";
-import api from "../../../lib/axios";
+// frontend/pages/products/[id].js
+
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+
+import Navbar from '../../../components/Navbar';
+import Loader from '../../../components/Loader';
+
+import api from '../../../services/api';
 
 export default function ProductDetails() {
   const router = useRouter();
 
   const { id } = router.query;
 
-  const [product, setProduct] =
-    useState(null);
+  const [product, setProduct] = useState(null);
 
-  useEffect(() => {
-    const token =
-      localStorage.getItem("token");
-
-    if (!token) {
-      router.push("/login");
-    }
-  }, []);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (id) {
@@ -27,43 +24,83 @@ export default function ProductDetails() {
   }, [id]);
 
   const fetchProduct = async () => {
-    const res = await api.get(
-      `/products/${id}`
-    );
+    try {
+      setLoading(true);
 
-    setProduct(res.data);
+      const res = await api.get(`/products/${id}`);
+
+      setProduct(res.data);
+    } catch (error) {
+      console.log(error);
+
+      alert('Failed to load product');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (!product)
-    return (
-      <div className="text-center py-20 text-3xl font-bold">
-        Loading...
-      </div>
-    );
+  if (loading) return <Loader />;
 
   return (
-    <Layout>
-      <div className="bg-white p-8 rounded-2xl shadow-sm max-w-4xl mx-auto">
-        <img
-          src={`${process.env.NEXT_PUBLIC_API_URL.replace(
-            "/api",
-            ""
-          )}/uploads/${product.image}`}
-          className="w-full h-96 object-cover rounded-2xl mb-8"
-        />
+    <div className="min-h-screen bg-gray-100">
+      <Navbar />
 
-        <h1 className="text-5xl font-bold mb-4">
-          {product.name}
-        </h1>
+      <div className="max-w-6xl mx-auto p-6">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden grid md:grid-cols-2 gap-8">
+          {/* Product Image */}
+          <div>
+            {product?.image ? (
+              <img
+                src={`http://localhost:5000/uploads/${product.image}`}
+                alt={product.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="h-full min-h-[400px] bg-gray-200 flex items-center justify-center">
+                <span className="text-gray-500 text-xl">
+                  No Image
+                </span>
+              </div>
+            )}
+          </div>
 
-        <p className="text-3xl text-gray-600 mb-6">
-          ${product.price}
-        </p>
+          {/* Product Details */}
+          <div className="p-8 flex flex-col justify-center">
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">
+              {product?.title}
+            </h1>
 
-        <p className="text-lg text-gray-700 leading-8">
-          {product.description}
-        </p>
+            <p className="text-gray-600 text-lg leading-relaxed mb-6">
+              {product?.description}
+            </p>
+
+            <p className="text-5xl font-bold text-blue-600 mb-8">
+              ${product?.price}
+            </p>
+
+            {/* Buttons */}
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={() =>
+                  router.push(`/products/edit/${product._id}`)
+                }
+                className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-xl"
+              >
+                Edit Product
+              </button>
+
+              <button
+                onClick={() =>
+                  router.push('/products')
+                }
+                className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-xl"
+              >
+                Back
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </Layout>
+    </div>
   );
 }

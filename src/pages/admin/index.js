@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import Layout from "../../../components/Layout";
 
-import { getUser } from "../../../lib/auth";
+import { getUser } from "../../../services/api";
 
 export default function AdminPage() {
   const router = useRouter();

@@ -1,41 +1,31 @@
-import {  useRouter } from "next/router";
+// frontend/pages/products/edit/[id].js
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-import { useForm } from "react-hook-form";
+import Navbar from '../../../../components/Navbar';
+import Loader from '../../../../components/Loader';
 
-import Layout from "../../../../components/Layout";
-
-import api from "../../../../lib/axios";
-
-import toast from "react-hot-toast";
+import api from '../../../../services/api';
 
 export default function EditProduct() {
   const router = useRouter();
 
   const { id } = router.query;
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-  } = useForm();
+  const [loading, setLoading] = useState(true);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [product, setProduct] = useState({
+    title: '',
+    description: '',
+    price: '',
+  });
 
-  useEffect(() => {
-    const token =
-      localStorage.getItem("token");
+  const [image, setImage] = useState(null);
 
-    if (!token) {
-     router.push("/login");
-    }
-  }, []);
+  const [preview, setPreview] = useState('');
 
+  // Fetch Product
   useEffect(() => {
     if (id) {
       fetchProduct();
@@ -43,100 +33,192 @@ export default function EditProduct() {
   }, [id]);
 
   const fetchProduct = async () => {
-    const res = await api.get(
-      `/products/${id}`
-    );
+    try {
+      const res = await api.get(`/products/${id}`);
 
-    reset(res.data);
+      setProduct({
+        title: res.data.title,
+        description: res.data.description,
+        price: res.data.price,
+      });
 
-    setLoading(false);
+      if (res.data.image) {
+        setPreview(
+          `http://localhost:5000/uploads/${res.data.image}`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+
+      alert('Failed to fetch product');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const onSubmit = async (data) => {
+  // Handle Input Change
+  const handleChange = (e) => {
+    setProduct({
+      ...product,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Handle Image
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+
+    setImage(file);
+
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  // Submit Form
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
+      setLoading(true);
+
       const formData = new FormData();
 
+      formData.append('title', product.title);
       formData.append(
-        "name",
-        data.name
+        'description',
+        product.description
       );
+      formData.append('price', product.price);
 
-      formData.append(
-        "price",
-        data.price
-      );
-
-      formData.append(
-        "description",
-        data.description
-      );
-
-      if (data.image[0]) {
-        formData.append(
-          "image",
-          data.image[0]
-        );
+      if (image) {
+        formData.append('image', image);
       }
 
       await api.put(
         `/products/${id}`,
-        formData
+        formData,
+        {
+          headers: {
+            'Content-Type':
+              'multipart/form-data',
+          },
+        }
       );
 
-      toast.success(
-        "Product updated"
-      );
-      Router.push("/products");
+      alert('Product updated successfully');
+
+      router.push('/products');
     } catch (error) {
-      toast.error(
-        "Update failed"
-      );
+      console.log(error);
+
+      alert('Update failed');
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (loading)
-    return (
-      <div className="text-center py-20 text-3xl font-bold">
-        Loading...
-      </div>
-    );
+  if (loading) return <Loader />;
 
   return (
-    <Layout>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-8 rounded-2xl shadow-sm max-w-2xl"
-      >
-        <h1 className="text-4xl font-bold mb-8">
-          Edit Product
-        </h1>
+    <div className="min-h-screen bg-gray-100">
+      <Navbar />
 
-        <input
-          className="w-full border p-4 rounded-xl mb-4"
-          {...register("name")}
-        />
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="bg-white rounded-2xl shadow-lg p-8">
+          <h1 className="text-4xl font-bold text-gray-800 mb-8">
+            Edit Product
+          </h1>
 
-        <input
-          type="number"
-          className="w-full border p-4 rounded-xl mb-4"
-          {...register("price")}
-        />
+          <form onSubmit={handleSubmit}>
+            {/* Title */}
+            <div className="mb-5">
+              <label className="block mb-2 font-semibold">
+                Product Title
+              </label>
 
-        <textarea
-          className="w-full border p-4 rounded-xl mb-4 h-40"
-          {...register("description")}
-        />
+              <input
+                type="text"
+                name="title"
+                value={product.title}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-3 rounded-lg"
+              />
+            </div>
 
-        <input
-          type="file"
-          className="w-full border p-4 rounded-xl mb-6"
-          {...register("image")}
-        />
+            {/* Description */}
+            <div className="mb-5">
+              <label className="block mb-2 font-semibold">
+                Description
+              </label>
 
-        <button className="bg-black text-white px-6 py-4 rounded-xl font-semibold">
-          Update Product
-        </button>
-      </form>
-    </Layout>
+              <textarea
+                rows="5"
+                name="description"
+                value={product.description}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-3 rounded-lg"
+              />
+            </div>
+
+            {/* Price */}
+            <div className="mb-5">
+              <label className="block mb-2 font-semibold">
+                Price
+              </label>
+
+              <input
+                type="number"
+                name="price"
+                value={product.price}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-3 rounded-lg"
+              />
+            </div>
+
+            {/* Image */}
+            <div className="mb-6">
+              <label className="block mb-2 font-semibold">
+                Product Image
+              </label>
+
+              <input
+                type="file"
+                onChange={handleImage}
+                className="w-full"
+              />
+
+              {preview && (
+                <img
+                  src={preview}
+                  alt="preview"
+                  className="mt-4 h-60 rounded-xl object-cover"
+                />
+              )}
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-4">
+              <button
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl"
+              >
+                Update Product
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  router.push('/products')
+                }
+                className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }
