@@ -7,8 +7,10 @@ import {
   useState,
 } from 'react';
 
+// Create Context
 const AuthContext = createContext();
 
+// Provider Component
 export const AuthProvider = ({ children }) => {
   // User State
   const [user, setUser] = useState(null);
@@ -16,9 +18,10 @@ export const AuthProvider = ({ children }) => {
   // Loading State
   const [loading, setLoading] = useState(true);
 
-  // Check User on Page Refresh
+  // Check User on Refresh
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser =
+      localStorage.getItem('user');
 
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -27,39 +30,55 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // Login Function
+  // =========================
+  // LOGIN FUNCTION
+  // =========================
   const login = (data) => {
-    // Save Token
-    localStorage.setItem('token', data.token);
+    // Save token in localStorage
+    localStorage.setItem(
+      'token',
+      data.token
+    );
 
-    // Save User
+    // Save user in localStorage
     localStorage.setItem(
       'user',
       JSON.stringify(data.user)
     );
 
-    // Update State
+    // Save token in cookies
+    document.cookie = `token=${data.token}; path=/`;
+
+    // Update user state
     setUser(data.user);
   };
 
-  // Logout Function
+  // =========================
+  // LOGOUT FUNCTION
+  // =========================
   const logout = () => {
-    // Remove Data
+    // Remove localStorage data
     localStorage.removeItem('token');
+
     localStorage.removeItem('user');
 
-    // Clear State
+    // Remove cookie
+    document.cookie =
+      'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+
+    // Clear user state
     setUser(null);
   };
 
+  // Return Provider
   return (
     <AuthContext.Provider
       value={{
         user,
         setUser,
+        loading,
         login,
         logout,
-        loading,
       }}
     >
       {children}
@@ -68,4 +87,5 @@ export const AuthProvider = ({ children }) => {
 };
 
 // Custom Hook
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () =>
+  useContext(AuthContext);

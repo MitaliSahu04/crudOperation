@@ -1,19 +1,31 @@
-import { NextResponse } from "next/server";
+// frontend/middleware.js
+
+import { NextResponse } from 'next/server';
 
 export function middleware(req) {
-  const token = req.cookies.get("token");
+  // Get token from cookies
+  const token = req.cookies.get('token');
 
-  const protectedRoutes = ["/products"];
+  // Protected Routes
+  const protectedRoutes = [
+    '/dashboard',
+    '/products',
+    '/profile',
+  ];
 
-  const isProtected = protectedRoutes.some((route) =>
-    req.nextUrl.pathname.startsWith(route)
-  );
+  // Check Protected Route
+  const isProtectedRoute =
+    protectedRoutes.some((route) =>
+      req.nextUrl.pathname.startsWith(route)
+    );
 
-  if (isProtected && !token) {
+  // Redirect if no token
+  if (isProtectedRoute && !token) {
     return NextResponse.redirect(
-      new URL("/login", req.url)
+      new URL('/login', req.url)
     );
   }
 
+  // Continue
   return NextResponse.next();
 }
